@@ -27,6 +27,7 @@ function modifyPayloadAndSaveMediaKey(payload, chat, sender) {
             return payload;
         try {
             const ret = yield downloadAndUploadAndSaveReturningTermsAndKey(payload, chat, sender);
+            console.log("[modify] OK");
             return fillmsg(payload, ret); // key is re-encrypted later
         }
         catch (e) {

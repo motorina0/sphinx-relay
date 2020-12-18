@@ -389,7 +389,7 @@ exports.receivePurchaseDeny = (payload) => __awaiter(void 0, void 0, void 0, fun
     });
 });
 exports.receiveAttachment = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log('received attachment', { payload })
+    console.log('received attachment');
     var date = new Date();
     date.setMilliseconds(0);
     const { owner, sender, chat, mediaToken, mediaKey, mediaType, content, msg_id, chat_type, sender_alias, msg_uuid, reply_uuid, network_type, sender_photo_url } = yield helpers.parseReceiveParams(payload);

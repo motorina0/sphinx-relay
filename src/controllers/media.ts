@@ -425,7 +425,7 @@ export const receivePurchaseDeny = async (payload) => {
 }
 
 export const receiveAttachment = async (payload) => {
-  // console.log('received attachment', { payload })
+  console.log('received attachment')
 
   var date = new Date();
   date.setMilliseconds(0)

@@ -16,6 +16,7 @@ export async function modifyPayloadAndSaveMediaKey(payload, chat, sender) {
   if (payload.type !== msgtypes.attachment) return payload
   try {
     const ret = await downloadAndUploadAndSaveReturningTermsAndKey(payload, chat, sender)
+    console.log("[modify] OK")
     return fillmsg(payload, ret) // key is re-encrypted later
   } catch (e) {
     console.log("[modify] error", e)
