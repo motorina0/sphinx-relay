@@ -45,6 +45,7 @@ function setVersion() {
         }
         catch (e) {
             console.log('=> [db] setVersion failed');
+            console.error(e);
         }
     });
 }

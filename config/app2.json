@@ -1,4 +1,27 @@
 {
+  "development": {
+    "senza_url": "http://localhost:3000/api/v2",
+    "macaroon_location": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/testnet/volumes/.lnd/data/chain/bitcoin/testnet/admin.macaroon",
+    "tls_location": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/testnet/volumes/.lnd/tls.cert",
+    "node_ip": "127.0.0.1",
+    "lnd_ip": "127.0.0.1",
+    "lnd_port": "10009",
+    "node_http_protocol": "http",
+    "node_http_port": "3001",
+    "hub_api_url": "http://lvh.me/api/v1",
+    "hub_url": "http://lvh.me/ping",
+    "hub_invite_url": "http://lvh.me/invites",
+    "hub_check_invite_url": "http://lvh.me/check_invite",
+    "media_host": "localhost:5000",
+    "tribes_host": "tribes.sphinx.chat",
+    "public_url": "",
+    "connection_string_path": "connection_string.txt",
+    "ssl": {
+      "enabled": false,
+      "save": true,
+      "port": "80"
+    }
+  },
   "production": {
     "senza_url": "https://staging.senza.us/api/v2/",
     "macaroon_location": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon",
@@ -15,7 +38,7 @@
     "hub_check_invite_url": "https://hub.sphinx.chat/check_invite",
     "media_host": "memes.sphinx.chat",
     "tribes_host": "tribes.sphinx.chat",
-    "public_url": "192.168.0.66:3001",
+    "public_url": "",
     "connection_string_path": "connection_string.txt",
     "ssl": {
       "enabled": false,

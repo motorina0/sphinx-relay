@@ -21,11 +21,15 @@ function getQR() {
         const public_url = config.public_url;
         if (public_url)
             theIP = public_url;
+        console.log('public_url', public_url);
+        console.log('0. theIP', theIP);
         if (!theIP) {
             const ip = process.env.NODE_IP;
+            console.log('1. ip', ip);
             if (!ip) {
                 try {
                     theIP = yield publicIp.v4();
+                    console.log('1. theIP', theIP);
                 }
                 catch (e) { }
             }
@@ -33,9 +37,12 @@ function getQR() {
                 // const port = config.node_http_port
                 // theIP = port ? `${ip}:${port}` : ip
                 theIP = ip;
+                console.log('2. theIP', theIP);
             }
         }
-        return Buffer.from(`ip::${theIP}::${password_1.default || ''}`).toString('base64');
+        const url = Buffer.from(`ip::${theIP}::${password_1.default || ''}`).toString('base64');
+        console.log('url', url);
+        return url;
     });
 }
 exports.getQR = getQR;

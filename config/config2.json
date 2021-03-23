@@ -1,0 +1,18 @@
+{
+  "development": {
+    "dialect": "sqlite",
+    "storage": "/Users/Shared/sphinx.db"
+  },
+  "docker_development": {
+    "dialect": "sqlite",
+    "storage": "./sphinx.db"
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/sphinx/test/db"
+  },
+  "production": {
+    "dialect": "sqlite",
+    "storage": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/sphinx/prod/db"
+  }
+}

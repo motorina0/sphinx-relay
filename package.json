@@ -27,6 +27,7 @@
     "async": "^2.6.2",
     "async-lock": "^1.2.2",
     "axios": "^0.21.0",
+    "bcrypt": "^5.0.1",
     "bitcoin-address-validation": "^1.0.2",
     "bytebuffer": "^5.0.1",
     "change-case": "^4.1.1",

@@ -11,19 +11,27 @@ export async function getQR():Promise<string> {
   const public_url = config.public_url
   if (public_url) theIP = public_url
 
+  console.log('public_url', public_url)
+  console.log('0. theIP', theIP)
+
   if (!theIP) {
     const ip = process.env.NODE_IP
+    console.log('1. ip', ip)
     if (!ip) {
       try {
         theIP = await publicIp.v4()
+        console.log('1. theIP', theIP)
       } catch (e) { }
     } else {
       // const port = config.node_http_port
       // theIP = port ? `${ip}:${port}` : ip
       theIP = ip
+      console.log('2. theIP', theIP)
     }
   }
-  return Buffer.from(`ip::${theIP}::${password || ''}`).toString('base64')
+  const url = Buffer.from(`ip::${theIP}::${password || ''}`).toString('base64')
+  console.log('url', url)
+  return url;
 }
 
 export async function connect(req, res) {
