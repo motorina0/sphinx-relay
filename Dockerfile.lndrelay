@@ -32,7 +32,7 @@ ENV NODE_SCHEME http
 # Add bash and ca-certs, for quality of life and SSL-related reasons.
 RUN apk --no-cache add bash ca-certificates
 
-# Copy the binaries from the builder image.
+# Copy the binaries from the builder image.  
 COPY --from=builder /go/bin/lncli /bin/
 COPY --from=builder /go/bin/lnd /bin/
 
