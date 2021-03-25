@@ -7,7 +7,7 @@
     "test": "echo 'no tests yet!' && exit 0",
     "docker-dev": "nodemon ./app.js",
     "build": "tsc",
-    "start-electron": "electron main.js",
+    "start-electron": "cp config/app.json dist/config/app.json && cp config/config.json dist/config/config.json && electron main.js",
     "start-ts": "ts-node ./app.ts",
     "start": "ts-node ./app.ts",
     "start-password": "USE_PASSWORD=true ts-node ./app.ts",
