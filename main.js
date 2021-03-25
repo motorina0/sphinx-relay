@@ -21,12 +21,12 @@ function createWindow () {
   process.env.NODE_ENV="production"
   process.env.LND_IP="localhost"
   process.env.LND_PORT="11009"
-  process.env.MACAROON_LOCATION="/relay/.lnd/macaroons/admin.macaroon"
-  process.env.TLS_LOCATION="/relay/.lnd/cert/tls.cert"
+  process.env.MACAROON_LOCATION="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
+  process.env.TLS_LOCATION="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert"
   process.env.PUBLIC_URL="localhost:3300"
 
-  console.log('#################### process.env', JSON.stringify(process.env))
-  // require('dist/app')
+  // console.log('#################### process.env', JSON.stringify(process.env))
+  require('./dist/app')
 }
 
 app.whenReady().then(() => {

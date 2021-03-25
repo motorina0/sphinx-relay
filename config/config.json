@@ -13,6 +13,6 @@
   },
   "production": {
     "dialect": "sqlite",
-    "storage": "/relay/.lnd/sphinx.db"
+    "storage": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/sphinx/prod/db/sphinx.db"
   }
 }
