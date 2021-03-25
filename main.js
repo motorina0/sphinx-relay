@@ -29,7 +29,7 @@ function createWindow(op = {}) {
   forwardConsoleToWindow(win);
 
 
-  let relayServerApp; // = fork('./electron/startServer.js');
+  let relayServerApp;
 
   ipcMain.on('update.config', (event, config) => {
     console.log('####### reload ########', config)
@@ -41,6 +41,7 @@ function createWindow(op = {}) {
     relayServerApp.on('message', (msg) => {
       console.log(...msg.args);
     })
+    
   });
 }
 
@@ -70,9 +71,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-ipcMain.on('app_version', (event) => {
-  event.sender.send('app_version', {
-    version: app.getVersion()
-  });
-});
