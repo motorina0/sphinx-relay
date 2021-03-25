@@ -1,14 +1,16 @@
 const {
+  fork
+} = require('child_process');
+const path = require('path')
+
+const {
   app,
   ipcMain,
   BrowserWindow
 } = require('electron')
-const path = require('path')
-
-
 
 function createWindow(op = {}) {
-  console.log('!!!!!!!!!!!!!!!!!!!')
+  console.log('###################### op: ', op)
   const win = new BrowserWindow({
     width: 800,
     height: 700,
@@ -24,8 +26,25 @@ function createWindow(op = {}) {
     mode: 'bottom'
   })
 
-  initProcessEnvironment(op.env)
+  forwardConsoleToWindow(win);
 
+
+  let relayServerApp; // = fork('./electron/startServer.js');
+
+  ipcMain.on('update.config', (event, config) => {
+    console.log('####### reload ########', config)
+    relayServerApp && relayServerApp.kill()
+    relayServerApp = fork('./electron/startServer.js');
+    relayServerApp.send({
+      env: config.env
+    });
+    relayServerApp.on('message', (msg) => {
+      console.log(...msg.args);
+    })
+  });
+}
+
+function forwardConsoleToWindow(win) {
   const log = console.log.bind(console)
   console.log = (...args) => {
     log(...args)
@@ -33,21 +52,8 @@ function createWindow(op = {}) {
       args
     });
   }
-
-  require('./dist/app')
 }
 
-function initProcessEnvironment(env = {}) {
-  process.env.PORT = env.port || "3300"
-  process.env.NODE_IP = env.node_ip || "0.0.0.0"
-  process.env.NODE_ENV = env.node_env || "production"
-  process.env.LND_IP = env.lnd_ip || "localhost"
-  process.env.LND_PORT = env.lnd_port || "11009"
-  process.env.MACAROON_LOCATION = env.macaroon_location || "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
-  process.env.TLS_LOCATION = env.tls_location || "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert"
-  process.env.PUBLIC_URL = env.public_url || "localhost:3300"
-  process.env.CONNECT_UI = true
-}
 
 app.whenReady().then(() => {
   createWindow()
