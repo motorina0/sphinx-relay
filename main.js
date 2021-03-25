@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, ipcMain, BrowserWindow } = require('electron')
 const path = require('path')
 
 
@@ -9,7 +9,9 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false,
     }
   })
 
@@ -24,8 +26,14 @@ function createWindow () {
   process.env.MACAROON_LOCATION="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
   process.env.TLS_LOCATION="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert"
   process.env.PUBLIC_URL="localhost:3300"
+  process.env.CONNECT_UI=true
 
-  // console.log('#################### process.env', JSON.stringify(process.env))
+  const log = console.log.bind(console)
+  console.log = (...args) => {
+    log(...args)
+    win.webContents.send('console.log', { args });
+  }
+
   require('./dist/app')
 }
 
@@ -44,3 +52,7 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+ipcMain.on('app_version', (event) => {
+  event.sender.send('app_version', { version: app.getVersion() });
+});

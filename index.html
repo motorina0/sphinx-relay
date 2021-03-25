@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 </head>
+
 <body style="background: white;">
     <h1>Hello World!</h1>
     <p>
@@ -12,5 +14,23 @@
         Chromium <span id="chrome-version"></span>,
         and Electron <span id="electron-version"></span>.
     </p>
+    <p>
+        App <span id="app-version">0</span>
+    </p>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const version = document.getElementById('app-version');
+
+        ipcRenderer.send('app_version');
+        ipcRenderer.on('app_version', (event, arg) => {
+            ipcRenderer.removeAllListeners('app_version');
+            version.innerText = 'Version ' + arg.version;
+        });
+        ipcRenderer.on('console.log', (event, value) => {
+            console.log(...value.args)
+        });
+    </script>
 </body>
+
 </html>
