@@ -1,13 +1,17 @@
-const { app, ipcMain, BrowserWindow } = require('electron')
+const {
+  app,
+  ipcMain,
+  BrowserWindow
+} = require('electron')
 const path = require('path')
 
 
 
-function createWindow () {
+function createWindow(op = {}) {
   console.log('!!!!!!!!!!!!!!!!!!!')
   const win = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 700,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -16,25 +20,33 @@ function createWindow () {
   })
 
   win.loadFile('index.html')
-  win.webContents.openDevTools()
+  win.webContents.openDevTools({
+    mode: 'bottom'
+  })
 
-  process.env.PORT="3300"
-  process.env.NODE_IP="0.0.0.0"
-  process.env.NODE_ENV="production"
-  process.env.LND_IP="localhost"
-  process.env.LND_PORT="11009"
-  process.env.MACAROON_LOCATION="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
-  process.env.TLS_LOCATION="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert"
-  process.env.PUBLIC_URL="localhost:3300"
-  process.env.CONNECT_UI=true
+  initProcessEnvironment(op.env)
 
   const log = console.log.bind(console)
   console.log = (...args) => {
     log(...args)
-    win.webContents.send('console.log', { args });
+    win.webContents.send('console.log', {
+      args
+    });
   }
 
   require('./dist/app')
+}
+
+function initProcessEnvironment(env = {}) {
+  process.env.PORT = env.port || "3300"
+  process.env.NODE_IP = env.node_ip || "0.0.0.0"
+  process.env.NODE_ENV = env.node_env || "production"
+  process.env.LND_IP = env.lnd_ip || "localhost"
+  process.env.LND_PORT = env.lnd_port || "11009"
+  process.env.MACAROON_LOCATION = env.macaroon_location || "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
+  process.env.TLS_LOCATION = env.tls_location || "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert"
+  process.env.PUBLIC_URL = env.public_url || "localhost:3300"
+  process.env.CONNECT_UI = true
 }
 
 app.whenReady().then(() => {
@@ -54,5 +66,7 @@ app.on('window-all-closed', () => {
 })
 
 ipcMain.on('app_version', (event) => {
-  event.sender.send('app_version', { version: app.getVersion() });
+  event.sender.send('app_version', {
+    version: app.getVersion()
+  });
 });
