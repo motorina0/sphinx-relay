@@ -32,7 +32,7 @@ function createWindow(op = {}) {
   let relayServerApp;
 
   ipcMain.on('update.config', (event, config) => {
-    console.log('####### reload ########', config)
+    console.log('#######- reload -########', config)
     relayServerApp && relayServerApp.kill()
     relayServerApp = fork('./electron/startServer.js');
     relayServerApp.send({

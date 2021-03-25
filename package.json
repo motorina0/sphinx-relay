@@ -2,14 +2,14 @@
   "name": "nodeapp",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo 'no tests yet!' && exit 0",
     "docker-dev": "nodemon ./app.js",
     "build": "tsc",
     "start-electron": "cp config/app.json dist/config/app.json && cp config/config.json dist/config/config.json && electron main.js",
     "start-ts": "ts-node ./app.ts",
-    "start": "ts-node ./app.ts",
+    "start": "electron-forge start",
     "start-password": "USE_PASSWORD=true ts-node ./app.ts",
     "start-hosting": "HOSTING_PROVIDER=true ts-node ./app.ts",
     "prod": "cp config/app.json dist/config/app.json && cp config/config.json dist/config/config.json && env NODE_ENV=production node dist/app.js",
@@ -17,9 +17,11 @@
     "dev": "rm -rf dist/ && tsc && cp -r public dist/public && node --inspect ./dist/app.js",
     "build-binaries": "rm -rf dist/ && tsc && cp config/app.json dist/config/app.json && cp config/config.json dist/config/config.json && pkg . --target node12-alpine-x64,node12-macos-x64 --out-path binaries",
     "start-ecs": "cp config/app.json dist/config/app.json && cp config/config.json dist/config/config.json && export NODE_ENV=production && node --max-old-space-size=128 dist/app.js",
-    "electron-build": "electron-builder",
     "electron-rebuild": "electron-rebuild",
-    "electron-update": "electron-update"
+    "electron-update": "electron-update",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "make-mac": "npx @electron-forge/cli make --platform darwin"
   },
   "keywords": [],
   "author": "",
@@ -42,6 +44,7 @@
     "crypto-js": "^4.0.0",
     "dateformat": "^3.0.3",
     "decamelize": "^3.1.1",
+    "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^4.3.8",
     "express": "^4.16.4",
     "express-winston": "^4.0.2",
@@ -89,17 +92,46 @@
     "zbase32": "^1.0.2"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "electron": "^12.0.2",
-    "electron-builder": "^22.10.5",
     "electron-rebuild": "^2.3.5",
     "nodemon": "^2.0.1",
     "sqlite3": "^5.0.0"
   },
   "pkg": {
-    "assets": [
-      "config/*",
-      "dist/config/*"
-    ]
+    "assets": []
   },
-  "bin": "dist/app.js"
+  "bin": "main.js",
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "nodeapp"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "publishers": []
+    }
+  }
 }

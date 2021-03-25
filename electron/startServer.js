@@ -1,10 +1,11 @@
 process.on('message', (op) => {
+    console.log = (...args) => {
+        process.send({
+            args
+        });
+    }
     console.log('Sphinx Relay Server options:', op);
     initProcessEnvironment(op.env);
-    // forwardConsoleParent();
-    console.log = (...args) => {
-        process.send({args});
-      }
     require('../dist/app');
 });
 
