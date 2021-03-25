@@ -2,40 +2,211 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Sphinx Relay</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="icon" href="/static/sphinx-logo.png">
+    <style>
+        html {
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        body {
+            background: #292a2d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #qr-wrap {
+            background: white;
+            width: 300px;
+            height: 300px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        canvas {
+            height: 280px;
+            width: 280px;
+        }
+
+        pre {
+            margin-top: 8px;
+            border-radius: 10px;
+            max-width: 250px;
+            padding: 18px 25px 0px 25px;
+            border: 1px solid tan;
+            background: white;
+            overflow: hidden;
+            overflow-wrap: break-word;
+            display: block;
+            white-space: pre-wrap;
+            color: darkslategray;
+        }
+
+        img {
+            height: 100px;
+            width: 100px;
+            margin-top: 20px;
+        }
+
+        p {
+            margin-top: 30px;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        ul {
+            list-style: none;
+            max-width: 333px;
+        }
+
+        li {
+            margin-top: 8px;
+        }
+
+        input[type="checkbox"] {
+            pointer-events: none;
+        }
+
+        a {
+            color: #628aff;
+            font-weight: bold;
+        }
+
+        a:visited {
+            color: #628aff;
+            font-weight: bold;
+        }
+
+        #stuff {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
 </head>
 
-<body style="background: white;">
-    <h1>Hello World!</h1>
-    <p>
-        We are using Node.js <span id="node-version"></span>,
-        Chromium <span id="chrome-version"></span>,
-        and Electron <span id="electron-version"></span>.
+
+<body>
+    <img src="public/sphinx-logo.png" alt="logo" />
+
+    <ul>
+
+        <li>
+            <input id="chan" type="checkbox" />
+            <span id="chan-text"></span>
+        </li>
+
+        <li>
+            <input id="fees" type="checkbox" />
+            <span id="fees-text"></span>
+        </li>
+
+        <li>
+            <input id="bal" type="checkbox" />
+            <span id="bal-text"></span>
+        </li>
+
+    </ul>
+
+    <br />
+
+
+    <div id="qr-wrap" style="display: noneX;">
+        <canvas id="qr"></canvas>
+    </div>
+
+    <p id="qr-text" style="display: noneX;">
+        Scan the QR or copy the connection string into your Sphinx app
     </p>
-    <p>
-        App <span id="app-version">0</span>
-    </p>
+
+    <pre id="connection-string" style="display: noneX;"> CONNECTION_STRING</pre>
+
+
     <button onclick="updateConfig()">Update</button>
+    <button onclick="refresh()">Refresh</button>
+
 
     <script>
         const { ipcRenderer } = require('electron');
         const version = document.getElementById('app-version');
 
-        ipcRenderer.send('app_version');
-        ipcRenderer.on('app_version', (event, arg) => {
-            ipcRenderer.removeAllListeners('app_version');
-            version.innerText = 'Version ' + arg.version;
-        });
         ipcRenderer.on('console.log', (event, value) => {
             console.log(...value.args)
         });
 
         function updateConfig() {
             ipcRenderer.send('update.config', { a: 345 });
+
+        }
+        function refresh(){
+            location.reload();
         }
     </script>
+<!-- 
+    <script>
+        (function () {
+            const QRious = require('./public/js/qrious.js');
+            var qr = new QRious({
+                element: document.getElementById('qr'),
+                value: 'CONNECTION_STRING',
+                size: 300
+            });
+        })();
+    </script>
+    <script>
+        function get(id) { return document.getElementById(id) }
+
+        const chan = get('chan')
+        const chanText = get('chan-text')
+
+        if (window.channelIsOpen) {
+            chan.checked = true
+            chanText.innerHTML = 'You have an open channel'
+        } else {
+            chanText.innerHTML = 'You need to open a channel'
+        }
+
+        const fees = get('fees')
+        const feesText = get('fees-text')
+
+        if (window.channelFeesBaseZero) {
+            fees.checked = true
+            feesText.innerHTML = 'You have set your fee base to 0'
+        } else {
+            feesText.innerHTML = 'You need to set your fee base to 0'
+        }
+
+        const bal = get('bal')
+        const balText = get('bal-text')
+
+        if (window.hasRemoteBalance) {
+            bal.checked = true
+            balText.innerHTML = 'You have remote balance'
+        } else {
+            balText.innerHTML = 'You need remote balance (2% of channel size recommended)'
+        }
+
+        const qrWrap = get('qr-wrap')
+        const connString = get('connection-string')
+        const qrText = get('qr-text')
+
+        const readyToGo = window.hasRemoteBalance && window.channelFeesBaseZero && window.channelIsOpen
+
+        if (window.isSignedUp) {
+            qrText.innerHTML = "You have connected your app!"
+        } else if (readyToGo) {
+            qrWrap.style.display = 'flex'
+            qrText.style.display = 'block'
+            connString.style.display = 'block'
+        }
+    </script> 
+-->
 </body>
 
 </html>
