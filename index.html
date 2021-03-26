@@ -205,7 +205,7 @@
         </div>
 
         <div class="col-sm-2">
-
+            <!-- <button class="btn btn-secondary btn-block" onclick="openConnectPage()">Open Connect</button> -->
         </div>
 
         <div class="col-sm-2">
@@ -214,7 +214,6 @@
         <div class="col-sm-3">
             <button class="btn btn-secondary btn-block" onclick="openDevConsole()">Dev Console</button>
         </div>
-
     </div>
 
 
@@ -234,68 +233,17 @@
 
         }
         function openDevConsole() {
-            ipcRenderer.send('open.dev.console',);
+            ipcRenderer.send('open.dev.console');
+        }
+
+        function openConnectPage(){
+            ipcRenderer.send('open.connect.window');   
+        }
+
+        function fetchConnectionValues(){
+            
         }
     </script>
-    <!-- 
-    <script>
-        (function () {
-            const QRious = require('./public/js/qrious.js');
-            var qr = new QRious({
-                element: document.getElementById('qr'),
-                value: 'CONNECTION_STRING',
-                size: 300
-            });
-        })();
-    </script>
-    <script>
-        function get(id) { return document.getElementById(id) }
-
-        const chan = get('chan')
-        const chanText = get('chan-text')
-
-        if (window.channelIsOpen) {
-            chan.checked = true
-            chanText.innerHTML = 'You have an open channel'
-        } else {
-            chanText.innerHTML = 'You need to open a channel'
-        }
-
-        const fees = get('fees')
-        const feesText = get('fees-text')
-
-        if (window.channelFeesBaseZero) {
-            fees.checked = true
-            feesText.innerHTML = 'You have set your fee base to 0'
-        } else {
-            feesText.innerHTML = 'You need to set your fee base to 0'
-        }
-
-        const bal = get('bal')
-        const balText = get('bal-text')
-
-        if (window.hasRemoteBalance) {
-            bal.checked = true
-            balText.innerHTML = 'You have remote balance'
-        } else {
-            balText.innerHTML = 'You need remote balance (2% of channel size recommended)'
-        }
-
-        const qrWrap = get('qr-wrap')
-        const connString = get('connection-string')
-        const qrText = get('qr-text')
-
-        const readyToGo = window.hasRemoteBalance && window.channelFeesBaseZero && window.channelIsOpen
-
-        if (window.isSignedUp) {
-            qrText.innerHTML = "You have connected your app!"
-        } else if (readyToGo) {
-            qrWrap.style.display = 'flex'
-            qrText.style.display = 'block'
-            connString.style.display = 'block'
-        }
-    </script> 
--->
 </body>
 
 </html>

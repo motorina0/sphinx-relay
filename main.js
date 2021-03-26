@@ -35,15 +35,19 @@ function createWindow(op = {}) {
   forwardConsoleToWindow(win);
   addRootPathToGrpc();
 
-  let relayServerApp;
 
+  let connectInfoDialog;
+  ipcMain.on('open.connect.window', () => {
+    connectInfoDialog = openConnectInfoDialog(win, connectInfoDialog);
+  });
+
+  let relayServerApp;
   ipcMain.on('update.config', (event, config) => {
     console.log('####### reload ########', config)
     try {
       initProcessEnvironment(config.env);
-      console.log('1. process.env.PORT', process.env.PORT);
       relayServerApp = restartServer(relayServerApp, config);
-
+      openConnectInfoDialog(win, connectInfoDialog);
     } catch (err) {
       console.log('Failed to load server app!', err);
     }
@@ -54,7 +58,33 @@ function createWindow(op = {}) {
     win && !win.isDestroyed() && win.webContents.openDevTools({
       mode: 'bottom'
     })
+  });
+
+
+
+}
+
+function openConnectInfoDialog(parent, connectInfoDialog) {
+  connectInfoDialog && connectInfoDialog.destroy();
+  connectInfoDialog = new BrowserWindow({
+    parent,
+    alwaysOnTop: true,
+
+    height: 500
   })
+
+  connectInfoDialog.setTitle('Waiting for connection info!');
+
+
+  connectInfoDialog.loadURL(buildConnectDialogUrl());
+  connectInfoDialog.once('ready-to-show', () => {
+    connectInfoDialog.show();
+  })
+  setInterval(() => {
+    !connectInfoDialog.isDestroyed() && connectInfoDialog.reload();
+  }, 3000);
+
+  return connectInfoDialog;
 }
 
 function restartServer(relayServerApp, config) {
@@ -62,10 +92,6 @@ function restartServer(relayServerApp, config) {
   relayServerApp = fork(path.join(app.getAppPath(), 'electron/startServer.js'), [], {
     stdio: 'pipe'
   });
-  // relayServerApp = fork('./electron/startServer.js');
-  // relayServerApp.send({
-  //   env: config.env
-  // });
   relayServerApp.on('message', (msg) => {
     console.log(...msg.args);
   })
@@ -87,6 +113,10 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+function buildConnectDialogUrl() {
+  return 'http://localhost:3300/connect';
+}
 
 function initProcessEnvironment(env = {}) {
   process.env.PORT = env.port || "3300"
