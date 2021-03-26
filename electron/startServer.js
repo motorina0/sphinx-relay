@@ -1,12 +1,28 @@
+console.log('Sphinx Relay Start server 0.');
+
+console.log = (...args) => {
+    process.send({
+        args
+    });
+}
+
+console.error = (...args) => {
+    process.send({
+        args
+    });
+}
+
+console.log('Sphinx Relay Start server 1.');
+
 process.on('message', (op) => {
-    console.log = (...args) => {
-        process.send({
-            args
-        });
-    }
     console.log('Sphinx Relay Server options:', op);
     initProcessEnvironment(op.env);
-    require('../dist/app');
+    try {
+        require('../dist/app');
+    } catch (err) {
+        console.log('Failed to load server app!', err);
+    }
+
 });
 
 

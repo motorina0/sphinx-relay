@@ -95,18 +95,44 @@
 <body>
     <img src="public/sphinx-logo.png" alt="logo" />
 
-    <ul>
+    <form>
+        <label for="fname">Port:</label><br>
+        <input type="text" id="port" name="port" value="3300"><br>
 
+        <label for="nodeIp">Node IP:</label><br>
+        <input type="text" id="nodeIp" name="nodeIp" value="0.0.0.0">
+
+        <label for="nodeEnv">Node Envorionment:</label><br>
+        <input type="text" id="nodeEnv" name="nodeEnv" value="production">
+
+        <label for="xxx">xxxx:</label><br>
+        <input type="text" id="xxx" name="xxx" value="11111111"><br>
+
+        <label for="xxx">xxxx:</label><br>
+        <input type="text" id="xxx" name="xxx" value="11111111"><br>
+
+        <label for="xxx">xxxx:</label><br>
+        <input type="text" id="xxx" name="xxx" value="11111111"><br>
+
+        <label for="xxx">xxxx:</label><br>
+        <input type="text" id="xxx" name="xxx" value="11111111"><br>
+
+        <label for="xxx">xxxx:</label><br>
+        <input type="text" id="xxx" name="xxx" value="11111111"><br>
+    </form>
+
+    <button onclick="updateConfig()">Update</button>
+    <button onclick="refresh()">Refresh</button>
+
+    <ul>
         <li>
             <input id="chan" type="checkbox" />
             <span id="chan-text"></span>
         </li>
-
         <li>
             <input id="fees" type="checkbox" />
             <span id="fees-text"></span>
         </li>
-
         <li>
             <input id="bal" type="checkbox" />
             <span id="bal-text"></span>
@@ -128,8 +154,6 @@
     <pre id="connection-string" style="display: noneX;"> CONNECTION_STRING</pre>
 
 
-    <button onclick="updateConfig()">Update</button>
-    <button onclick="refresh()">Refresh</button>
 
 
     <script>
@@ -139,16 +163,19 @@
         ipcRenderer.on('console.log', (event, value) => {
             console.log(...value.args)
         });
+        ipcRenderer.on('console.error', (event, value) => {
+            console.error(...value.args)
+        });
 
         function updateConfig() {
             ipcRenderer.send('update.config', { a: 345 });
 
         }
-        function refresh(){
+        function refresh() {
             location.reload();
         }
     </script>
-<!-- 
+    <!-- 
     <script>
         (function () {
             const QRious = require('./public/js/qrious.js');
