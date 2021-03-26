@@ -5,6 +5,9 @@
     <title>Sphinx Relay</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <link rel="icon" href="/static/sphinx-logo.png">
+    <link rel="stylesheet" href="public/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- <script src="public/js/jquery-3.6.0.min.js" crossorigin="anonymous"></script> -->
+    <!-- <script src="public/js/bootstrap.bundle.js" crossorigin="anonymous"></script> -->
     <style>
         html {
             font-family: Arial, Helvetica, sans-serif;
@@ -15,7 +18,6 @@
             background: #292a2d;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
 
         #qr-wrap {
@@ -29,131 +31,191 @@
             margin-top: 20px;
         }
 
-        canvas {
-            height: 280px;
-            width: 280px;
-        }
-
-        pre {
-            margin-top: 8px;
-            border-radius: 10px;
-            max-width: 250px;
-            padding: 18px 25px 0px 25px;
-            border: 1px solid tan;
-            background: white;
-            overflow: hidden;
-            overflow-wrap: break-word;
-            display: block;
-            white-space: pre-wrap;
-            color: darkslategray;
-        }
-
         img {
             height: 100px;
             width: 100px;
             margin-top: 20px;
+
         }
 
-        p {
-            margin-top: 30px;
-            max-width: 300px;
-            text-align: center;
-        }
-
-        ul {
-            list-style: none;
-            max-width: 333px;
-        }
-
-        li {
-            margin-top: 8px;
-        }
-
-        input[type="checkbox"] {
-            pointer-events: none;
-        }
-
-        a {
-            color: #628aff;
-            font-weight: bold;
-        }
-
-        a:visited {
-            color: #628aff;
-            font-weight: bold;
-        }
-
-        #stuff {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
+        label {
+            color: aliceblue;
         }
     </style>
 </head>
 
 
 <body>
-    <img src="public/sphinx-logo.png" alt="logo" />
-
-    <form>
-        <label for="fname">Port:</label><br>
-        <input type="text" id="port" name="port" value="3300"><br>
-
-        <label for="nodeIp">Node IP:</label><br>
-        <input type="text" id="nodeIp" name="nodeIp" value="0.0.0.0">
-
-        <label for="nodeEnv">Node Envorionment:</label><br>
-        <input type="text" id="nodeEnv" name="nodeEnv" value="production">
-
-        <label for="xxx">xxxx:</label><br>
-        <input type="text" id="xxx" name="xxx" value="11111111"><br>
-
-        <label for="xxx">xxxx:</label><br>
-        <input type="text" id="xxx" name="xxx" value="11111111"><br>
-
-        <label for="xxx">xxxx:</label><br>
-        <input type="text" id="xxx" name="xxx" value="11111111"><br>
-
-        <label for="xxx">xxxx:</label><br>
-        <input type="text" id="xxx" name="xxx" value="11111111"><br>
-
-        <label for="xxx">xxxx:</label><br>
-        <input type="text" id="xxx" name="xxx" value="11111111"><br>
-    </form>
-
-    <button onclick="updateConfig()">Update</button>
-    <button onclick="refresh()">Refresh</button>
-
-    <ul>
-        <li>
-            <input id="chan" type="checkbox" />
-            <span id="chan-text"></span>
-        </li>
-        <li>
-            <input id="fees" type="checkbox" />
-            <span id="fees-text"></span>
-        </li>
-        <li>
-            <input id="bal" type="checkbox" />
-            <span id="bal-text"></span>
-        </li>
-
-    </ul>
-
-    <br />
-
-
-    <div id="qr-wrap" style="display: noneX;">
-        <canvas id="qr"></canvas>
+    <div class="text-center">
+        <img src="public/sphinx-logo.png" alt="logo" />
     </div>
 
-    <p id="qr-text" style="display: noneX;">
-        Scan the QR or copy the connection string into your Sphinx app
-    </p>
-
-    <pre id="connection-string" style="display: noneX;"> CONNECTION_STRING</pre>
 
 
+    <div class="row ml-5 mr-5 mt-5">
+        <div class="col-sm-4">
+            <label>Port</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="port" value="3300" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('port')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>Node IP</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="node_ip" value="0.0.0.0" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('node_ip')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>Environment</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="env" value="production" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('env')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>LND IP</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="lnd_ip" value="localhost" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('lnd_ip')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>LND Port</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="lnd_port" value="10009" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('lnd_port')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>LND Macaroon Location</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="macaroon_location" value="" placeholder="Absolute Path to admin.macaroon"
+                    class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('macaroon_location')"
+                        class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>LND TLS Location</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="tls_location" value="" placeholder="Absolute Path to tls.cert" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('tls_location')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>Public URL</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="public_url" value="localhost:3300" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('public_url')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>XXX</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="xxxx" value="" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('xxxx')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="row ml-5 mr-5 mt-5">
+
+
+        <div class="col-sm-3">
+            <button class="btn btn-warning btn-block" onclick="updateConfig()">Update</button>
+        </div>
+        <div class="col-sm-2">
+
+        </div>
+
+        <div class="col-sm-2">
+
+        </div>
+
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-3">
+            <button class="btn btn-secondary btn-block" onclick="openDevConsole()">Dev Console</button>
+        </div>
+
+    </div>
 
 
     <script>
@@ -171,8 +233,8 @@
             ipcRenderer.send('update.config', { a: 345 });
 
         }
-        function refresh() {
-            location.reload();
+        function openDevConsole() {
+            ipcRenderer.send('open.dev.console',);
         }
     </script>
     <!-- 

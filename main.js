@@ -30,9 +30,6 @@ function createWindow(op = {}) {
   })
 
   win.loadFile('index.html')
-  win.webContents.openDevTools({
-    mode: 'bottom'
-  })
 
   process.env.APP_PATH = app.getAppPath();
   forwardConsoleToWindow(win);
@@ -47,12 +44,17 @@ function createWindow(op = {}) {
       console.log('1. process.env.PORT', process.env.PORT);
       relayServerApp = restartServer(relayServerApp, config);
 
-      // require('./dist/app');
     } catch (err) {
       console.log('Failed to load server app!', err);
     }
     console.log('#######  done reload ########')
   });
+
+  ipcMain.on('open.dev.console', () => {
+    win && !win.isDestroyed() && win.webContents.openDevTools({
+      mode: 'bottom'
+    })
+  })
 }
 
 function restartServer(relayServerApp, config) {
