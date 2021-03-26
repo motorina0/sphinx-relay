@@ -9,6 +9,12 @@ const {
   BrowserWindow
 } = require('electron')
 
+const {
+  addRootPathToGrpc,
+  forwardConsoleToWindow
+} = require('./electron/interceptors');
+
+
 console.log('######################### main #########################')
 
 function createWindow(op = {}) {
@@ -28,6 +34,7 @@ function createWindow(op = {}) {
     mode: 'bottom'
   })
 
+  process.env.APP_PATH = app.getAppPath();
   forwardConsoleToWindow(win);
   addRootPathToGrpc();
 
@@ -37,6 +44,7 @@ function createWindow(op = {}) {
     console.log('####### reload ########', config)
     try {
       initProcessEnvironment(config.env);
+      console.log('1. process.env.PORT', process.env.PORT);
       relayServerApp = restartServer(relayServerApp, config);
 
       // require('./dist/app');
@@ -53,47 +61,14 @@ function restartServer(relayServerApp, config) {
     stdio: 'pipe'
   });
   // relayServerApp = fork('./electron/startServer.js');
-  relayServerApp.send({
-    env: config.env
-  });
+  // relayServerApp.send({
+  //   env: config.env
+  // });
   relayServerApp.on('message', (msg) => {
     console.log(...msg.args);
   })
   return relayServerApp;
 }
-
-function addRootPathToGrpc() {
-  const grpc = require("grpc");
-  const load = grpc.load.bind(grpc);
-  grpc.load = function (filename, format, options) {
-    if (typeof filename === 'string') {
-      filename = {
-        root: app.getAppPath(),
-        file: filename
-      }
-    }
-    return load(filename, format, options);
-  }
-}
-
-function forwardConsoleToWindow(win) {
-  const log = console.log.bind(console)
-  console.log = (...args) => {
-    log(...args)
-    win.webContents.send('console.log', {
-      args
-    });
-  }
-
-  const error = console.error.bind(console)
-  console.error = (...args) => {
-    error(...args)
-    win.webContents.send('console.error', {
-      args
-    });
-  }
-}
-
 
 app.whenReady().then(() => {
   createWindow()

@@ -1,4 +1,6 @@
-console.log('Sphinx Relay Start server 0.');
+const {
+    addRootPathToGrpc,
+  } = require('./interceptors');
 
 console.log = (...args) => {
     process.send({
@@ -12,19 +14,24 @@ console.error = (...args) => {
     });
 }
 
-console.log('Sphinx Relay Start server 1.');
+console.log('Sphinx Relay Start server...');
+console.log('2. process.env.PORT', process.env.PORT);
+addRootPathToGrpc();
 
-process.on('message', (op) => {
-    console.log('Sphinx Relay Server options:', op);
-    initProcessEnvironment(op.env);
+// process.on('message', (op) => {
+//     console.log('Sphinx Relay Server options:', op);
+//     initProcessEnvironment(op.env);
+
+
+// });
+
+function init(){
     try {
         require('../dist/app');
     } catch (err) {
-        console.log('Failed to load server app!', err);
+        console.error('Failed to load server app!', err);
     }
-
-});
-
+}
 
 function initProcessEnvironment(env = {}) {
     process.env.PORT = env.port || "3300"
@@ -37,3 +44,5 @@ function initProcessEnvironment(env = {}) {
     process.env.PUBLIC_URL = env.public_url || "localhost:3300"
     process.env.CONNECT_UI = true
 }
+
+init();

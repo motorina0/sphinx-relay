@@ -5,7 +5,7 @@ function addRootPathToGrpc() {
     grpc.load = function (filename, format, options) {
       if (typeof filename === 'string') {
         filename = {
-          root: app.getAppPath(),
+          root: process.env.APP_PATH,
           file: filename
         }
       }
