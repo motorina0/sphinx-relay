@@ -9,6 +9,8 @@ const {
   BrowserWindow
 } = require('electron')
 
+console.log('######################### main #########################')
+
 function createWindow(op = {}) {
   console.log('###################### op: ', op)
   const win = new BrowserWindow({
@@ -36,7 +38,7 @@ function createWindow(op = {}) {
     try {
       initProcessEnvironment(config.env);
       relayServerApp = restartServer(relayServerApp, config);
-    
+
       // require('./dist/app');
     } catch (err) {
       console.log('Failed to load server app!', err);
@@ -47,7 +49,10 @@ function createWindow(op = {}) {
 
 function restartServer(relayServerApp, config) {
   relayServerApp && relayServerApp.kill()
-  relayServerApp = fork('./electron/startServer.js');
+  relayServerApp = fork(path.join(app.getAppPath(), 'electron/startServer.js'), [], {
+    stdio: 'pipe'
+  });
+  // relayServerApp = fork('./electron/startServer.js');
   relayServerApp.send({
     env: config.env
   });
