@@ -129,3 +129,4 @@ function initProcessEnvironment(env = {}) {
   process.env.PUBLIC_URL = env.public_url || "localhost:3300"
   process.env.CONNECT_UI = true
 }
+

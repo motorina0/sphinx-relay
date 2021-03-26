@@ -89,9 +89,9 @@
         </div>
         <div class="col-sm-8">
             <div class="input-group input-group-sm">
-                <input id="env" value="production" class="form-control">
+                <input id="node_env" value="production" class="form-control">
                 <div class="input-group-append">
-                    <button type="button" onclick="showDetails('env')" class="btn btn-info btn-sm btn-info">
+                    <button type="button" onclick="showDetails('node_env')" class="btn btn-info btn-sm btn-info">
                         more
                     </button>
                 </div>
@@ -177,23 +177,6 @@
             </div>
         </div>
     </div>
-    <!-- 
-    <div class="row ml-5 mr-5 mt-3">
-        <div class="col-sm-4">
-            <label>XXX</label>
-        </div>
-        <div class="col-sm-8">
-            <div class="input-group input-group-sm">
-                <input id="xxxx" value="" class="form-control">
-                <div class="input-group-append">
-                    <button type="button" onclick="showDetails('xxxx')" class="btn btn-info btn-sm btn-info">
-                        more
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <div class="row ml-5 mr-5 mt-5">
 
 
@@ -229,19 +212,30 @@
         });
 
         function updateConfig() {
-            ipcRenderer.send('update.config', { a: 345 });
+            const configValues = fetchConnectionValues();
+            ipcRenderer.send('update.config', { env: configValues });
 
         }
         function openDevConsole() {
             ipcRenderer.send('open.dev.console');
         }
 
-        function openConnectPage(){
-            ipcRenderer.send('open.connect.window');   
+        function openConnectPage() {
+            ipcRenderer.send('open.connect.window');
         }
 
-        function fetchConnectionValues(){
-            
+        function fetchConnectionValues() {
+            const fetchValue = (id) => {
+                return document.getElementById(id).value || '';
+            }
+            const fetchValues = (ids = []) => {
+                return ids.reduce((acc = {}, id) => {
+                    acc[id] = fetchValue(id);
+                    return acc;
+                }, {});
+            }
+
+            return fetchValues(['port', 'node_ip', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'public_url']);
         }
     </script>
 </body>
