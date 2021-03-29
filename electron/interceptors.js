@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require("fs");
 
 function addRootPathToGrpc() {
   const grpc = require("grpc");
@@ -15,8 +16,7 @@ function addRootPathToGrpc() {
 }
 
 function fixPublicIndexFetch() {
-  const fs = require("fs");
-  const readFile = fs.readFile.bind(grpc);
+  const readFile = fs.readFile.bind(fs);
   fs.readFile = (...args) => {
     if (args[0] === 'public/index.html') {
       args[0] = path.join(process.env.APP_PATH, args[0]);
