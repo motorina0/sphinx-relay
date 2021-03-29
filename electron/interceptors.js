@@ -1,3 +1,5 @@
+const path = require('path');
+
 function addRootPathToGrpc() {
   const grpc = require("grpc");
   const load = grpc.load.bind(grpc);
@@ -9,6 +11,17 @@ function addRootPathToGrpc() {
       }
     }
     return load(filename, format, options);
+  }
+}
+
+function fixPublicIndexFetch() {
+  const fs = require("fs");
+  const readFile = fs.readFile.bind(grpc);
+  fs.readFile = (...args) => {
+    if (args[0] === 'public/index.html') {
+      args[0] = path.join(process.env.APP_PATH, args[0]);
+    }
+    return readFile(...args);
   }
 }
 
@@ -32,5 +45,6 @@ function forwardConsoleToWindow(win) {
 
 module.exports = {
   addRootPathToGrpc,
-  forwardConsoleToWindow
+  forwardConsoleToWindow,
+  fixPublicIndexFetch,
 }

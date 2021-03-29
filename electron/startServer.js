@@ -1,6 +1,7 @@
 const path = require('path');
 const {
     addRootPathToGrpc,
+    fixPublicIndexFetch,
 } = require('./interceptors');
 
 console.log = (...args) => {
@@ -17,6 +18,7 @@ console.error = (...args) => {
 
 console.log('Sphinx Relay Start server...');
 addRootPathToGrpc();
+fixPublicIndexFetch();
 
 function init() {
     try {
