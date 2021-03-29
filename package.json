@@ -51,6 +51,7 @@
     "fetch-blob": "^1.0.5",
     "form-data": "^3.0.0",
     "fs": "^0.0.1-security",
+    "got": "^11.8.2",
     "grpc": "^1.24.3",
     "helmet": "^3.21.1",
     "jasmine": "^3.5.0",

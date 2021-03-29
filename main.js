@@ -2,6 +2,7 @@ const {
   fork
 } = require('child_process');
 const path = require('path')
+const got = require('got');
 
 const {
   app,
@@ -60,8 +61,19 @@ function createWindow(op = {}) {
     })
   });
 
+  setInterval(async () => {
+    await pingConnectPage();
+  }, 3000);
+}
 
-
+async function pingConnectPage(){
+  try {
+    const response = await got('http://localhost:3300/connect');
+    console.log('response.statusCode', response.statusCode);
+    console.log('response.body', response.body);
+  } catch (err) {
+    // console.error('#########################', err);
+  }
 }
 
 function openConnectInfoDialog(parent, connectInfoDialog) {
@@ -80,9 +92,9 @@ function openConnectInfoDialog(parent, connectInfoDialog) {
   connectInfoDialog.once('ready-to-show', () => {
     connectInfoDialog.show();
   })
-  setInterval(() => {
-    !connectInfoDialog.isDestroyed() && connectInfoDialog.reload();
-  }, 3000);
+  // setInterval(() => {
+  //   !connectInfoDialog.isDestroyed() && connectInfoDialog.reload();
+  // }, 3000);
 
   return connectInfoDialog;
 }
@@ -129,4 +141,3 @@ function initProcessEnvironment(env = {}) {
   process.env.PUBLIC_URL = env.public_url || "localhost:3300"
   process.env.CONNECT_UI = true
 }
-
