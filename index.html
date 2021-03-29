@@ -152,13 +152,14 @@
 
         <div class="row ml-5 mr-5 mt-3">
             <div class="col-sm-4">
-                <label>Port</label>
+                <label>Node HTTP Protocol</label>
             </div>
             <div class="col-sm-8">
                 <div class="input-group input-group-sm">
-                    <input id="port" value="3300" class="form-control">
+                    <input id="node_http_protocol" value="http" class="form-control">
                     <div class="input-group-append">
-                        <button type="button" onclick="showDetails('port')" class="btn btn-info btn-sm btn-info">
+                        <button type="button" onclick="showDetails('node_http_protocol')"
+                            class="btn btn-info btn-sm btn-info">
                             more
                         </button>
                     </div>
@@ -172,9 +173,25 @@
             </div>
             <div class="col-sm-8">
                 <div class="input-group input-group-sm">
-                    <input id="node_ip" value="0.0.0.0" class="form-control">
+                    <input id="node_ip" value="127.0.0.1" class="form-control">
                     <div class="input-group-append">
                         <button type="button" onclick="showDetails('node_ip')" class="btn btn-info btn-sm btn-info">
+                            more
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ml-5 mr-5 mt-3">
+            <div class="col-sm-4">
+                <label>Port</label>
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group input-group-sm">
+                    <input id="port" value="3300" class="form-control">
+                    <div class="input-group-append">
+                        <button type="button" onclick="showDetails('port')" class="btn btn-info btn-sm btn-info">
                             more
                         </button>
                     </div>
@@ -282,21 +299,21 @@
                 }, {});
             }
 
-            return fetchValues(['port', 'node_ip', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'db_location', 'public_url']);
+            return fetchValues(['port', 'node_ip', 'node_http_protocol', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'db_location', 'public_url']);
         }
 
         function showAdvancedConfig() {
             const advancedConfigPanel = document.getElementById('advanced-config');
             const advancedConfigToggleButton = document.getElementById('advance-config-toggle-button');
-            
-            if (advancedConfigPanel.classList.contains('d-none')){
+
+            if (advancedConfigPanel.classList.contains('d-none')) {
                 advancedConfigPanel.classList.remove("d-none");
                 advancedConfigToggleButton.text = 'Less'
             } else {
                 advancedConfigPanel.classList.add("d-none");
                 advancedConfigToggleButton.text = 'More...'
             }
-            
+
         }
     </script>
 </body>

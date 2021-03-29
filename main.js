@@ -127,12 +127,13 @@ app.on('window-all-closed', () => {
 })
 
 function buildConnectDialogUrl() {
-  return 'http://localhost:3300/connect';
+  return `${process.env.NODE_HTTP_PROTOCOL}://${process.env.NODE_IP}:${process.env.PORT}/connect`;
 }
 
 function initProcessEnvironment(env = {}) {
   process.env.PORT = env.port;
   process.env.NODE_IP = env.node_ip;
+  process.env.NODE_HTTP_PROTOCOL = env.node_http_protocol;
   process.env.NODE_ENV = env.node_env;
   process.env.LND_IP = env.lnd_ip;
   process.env.LND_PORT = env.lnd_port;
