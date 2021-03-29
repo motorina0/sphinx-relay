@@ -61,18 +61,24 @@ function createWindow(op = {}) {
   });
 
   setInterval(async () => {
-    await pingConnectPage();
+    await pingConnectPage(win);
   }, 3000);
 }
 
-async function pingConnectPage() {
+async function pingConnectPage(win) {
+  win && !win.isDestroyed() && win.webContents.send('status.update', {
+    retry: true
+  });
+  let statusCode = '';
   try {
-    const response = await got('http://localhost:3300/connect');
-    console.log('response.statusCode', response.statusCode);
-    console.log('response.body', response.body);
-  } catch (err) {
-    // console.error('#########################', err);
-  }
+    const response = await got('http://localhost:3300/connect', {
+      timeout: 2000
+    });
+    statusCode = response.statusCode;
+  } catch {}
+  win && !win.isDestroyed() && win.webContents.send('status.update', {
+    statusCode
+  });
 }
 
 function openConnectInfoDialog(parent, connectInfoDialog) {
@@ -80,7 +86,6 @@ function openConnectInfoDialog(parent, connectInfoDialog) {
   connectInfoDialog = new BrowserWindow({
     parent,
     alwaysOnTop: true,
-
     height: 500
   })
 
