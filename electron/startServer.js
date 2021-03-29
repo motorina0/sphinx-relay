@@ -1,6 +1,7 @@
+const path = require('path');
 const {
     addRootPathToGrpc,
-  } = require('./interceptors');
+} = require('./interceptors');
 
 console.log = (...args) => {
     process.send({
@@ -17,8 +18,12 @@ console.error = (...args) => {
 console.log('Sphinx Relay Start server...');
 addRootPathToGrpc();
 
-function init(){
+function init() {
     try {
+        const config = require(path.join(process.env.APP_PATH, 'dist/config/config.json'));
+        if (config && config.production) {
+            config.production.storage = process.env.DB_LOCATION
+        }
         require('../dist/app');
     } catch (err) {
         console.error('Failed to load server app!', err);

@@ -180,9 +180,26 @@
             </div>
         </div>
     </div>
+
+    <div class="row ml-5 mr-5 mt-3">
+        <div class="col-sm-4">
+            <label>Sphinx DB Location</label>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group input-group-sm">
+                <input id="db_location"
+                    value="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/sphinx/prod/db/sphinx.db"
+                    placeholder="Absolute Path to sphinx DB file (...sphinx/db/sphinx.db)" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" onclick="showDetails('db_location')" class="btn btn-info btn-sm btn-info">
+                        more
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row ml-5 mr-5 mt-5">
-
-
         <div class="col-sm-3">
             <button class="btn btn-secondary btn-block" onclick="openDevConsole()">Dev Console</button>
 
@@ -257,7 +274,7 @@
                 }, {});
             }
 
-            return fetchValues(['port', 'node_ip', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'public_url']);
+            return fetchValues(['port', 'node_ip', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'db_location', 'public_url']);
         }
     </script>
 </body>

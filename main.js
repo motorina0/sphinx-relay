@@ -138,6 +138,7 @@ function initProcessEnvironment(env = {}) {
   process.env.LND_PORT = env.lnd_port;
   process.env.MACAROON_LOCATION = env.macaroon_location;
   process.env.TLS_LOCATION = env.tls_location;
+  process.env.DB_LOCATION = env.db_location;
   process.env.PUBLIC_URL = env.public_url;
   process.env.CONNECT_UI = true
 }
