@@ -1,0 +1,16 @@
+{
+  "config": {
+    "a": 2,
+    "env": {
+      "port": "3300",
+      "node_ip": "0.0.0.0",
+      "node_env": "production",
+      "lnd_ip": "localhost",
+      "lnd_port": "10009",
+      "macaroon_location": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon",
+      "tls_location": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert",
+      "db_location": "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/sphinx/prod/db/sphinx.db",
+      "public_url": "localhost:3300"
+    }
+  }
+}
