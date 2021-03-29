@@ -50,54 +50,6 @@
         <img src="public/sphinx-logo.png" alt="logo" />
     </div>
 
-
-
-    <div class="row ml-5 mr-5 mt-5">
-        <div class="col-sm-4">
-            <label>Port</label>
-        </div>
-        <div class="col-sm-8">
-            <div class="input-group input-group-sm">
-                <input id="port" value="3300" class="form-control">
-                <div class="input-group-append">
-                    <button type="button" onclick="showDetails('port')" class="btn btn-info btn-sm btn-info">
-                        more
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row ml-5 mr-5 mt-3">
-        <div class="col-sm-4">
-            <label>Node IP</label>
-        </div>
-        <div class="col-sm-8">
-            <div class="input-group input-group-sm">
-                <input id="node_ip" value="0.0.0.0" class="form-control">
-                <div class="input-group-append">
-                    <button type="button" onclick="showDetails('node_ip')" class="btn btn-info btn-sm btn-info">
-                        more
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row ml-5 mr-5 mt-3">
-        <div class="col-sm-4">
-            <label>Environment</label>
-        </div>
-        <div class="col-sm-8">
-            <div class="input-group input-group-sm">
-                <input id="node_env" value="production" class="form-control">
-                <div class="input-group-append">
-                    <button type="button" onclick="showDetails('node_env')" class="btn btn-info btn-sm btn-info">
-                        more
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row ml-5 mr-5 mt-3">
         <div class="col-sm-4">
             <label>LND IP</label>
@@ -167,22 +119,6 @@
 
     <div class="row ml-5 mr-5 mt-3">
         <div class="col-sm-4">
-            <label>Public URL</label>
-        </div>
-        <div class="col-sm-8">
-            <div class="input-group input-group-sm">
-                <input id="public_url" value="localhost:3300" class="form-control">
-                <div class="input-group-append">
-                    <button type="button" onclick="showDetails('public_url')" class="btn btn-info btn-sm btn-info">
-                        more
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row ml-5 mr-5 mt-3">
-        <div class="col-sm-4">
             <label>Sphinx DB Location</label>
         </div>
         <div class="col-sm-8">
@@ -199,7 +135,81 @@
         </div>
     </div>
 
-    <div class="row ml-5 mr-5 mt-5">
+    <div id="advanced-config" class="d-none">
+        <div class="row ml-5 mr-5 mt-5">
+            <div class="col-sm-4">
+                <label>Environment</label>
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group input-group-sm">
+                    <input id="node_env" value="production" class="form-control">
+                    <div class="input-group-append">
+                        <button type="button" onclick="showDetails('node_env')" class="btn btn-info btn-sm btn-info">
+                            more
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ml-5 mr-5 mt-3">
+            <div class="col-sm-4">
+                <label>Port</label>
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group input-group-sm">
+                    <input id="port" value="3300" class="form-control">
+                    <div class="input-group-append">
+                        <button type="button" onclick="showDetails('port')" class="btn btn-info btn-sm btn-info">
+                            more
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ml-5 mr-5 mt-3">
+            <div class="col-sm-4">
+                <label>Node IP</label>
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group input-group-sm">
+                    <input id="node_ip" value="0.0.0.0" class="form-control">
+                    <div class="input-group-append">
+                        <button type="button" onclick="showDetails('node_ip')" class="btn btn-info btn-sm btn-info">
+                            more
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ml-5 mr-5 mt-3">
+            <div class="col-sm-4">
+                <label>Public URL</label>
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group input-group-sm">
+                    <input id="public_url" value="localhost:3300" class="form-control">
+                    <div class="input-group-append">
+                        <button type="button" onclick="showDetails('public_url')" class="btn btn-info btn-sm btn-info">
+                            more
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ml-5 mr-5 mt-1">
+        <div class="col-sm-4">
+            <a id='advance-config-toggle-button' href="#advancedConfig" onclick="showAdvancedConfig()">More...</a>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+
+    <div class="row ml-5 mr-5 mt-4">
         <div class="col-sm-3">
             <button class="btn btn-secondary btn-block" onclick="openDevConsole()">Dev Console</button>
 
@@ -275,6 +285,20 @@
             }
 
             return fetchValues(['port', 'node_ip', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'db_location', 'public_url']);
+        }
+
+        function showAdvancedConfig() {
+            const advancedConfigPanel = document.getElementById('advanced-config');
+            const advancedConfigToggleButton = document.getElementById('advance-config-toggle-button');
+            
+            if (advancedConfigPanel.classList.contains('d-none')){
+                advancedConfigPanel.classList.remove("d-none");
+                advancedConfigToggleButton.text = 'Less'
+            } else {
+                advancedConfigPanel.classList.add("d-none");
+                advancedConfigToggleButton.text = 'More...'
+            }
+            
         }
     </script>
 </body>
