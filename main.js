@@ -48,7 +48,6 @@ function createWindow(op = {}) {
     try {
       initProcessEnvironment(config.env);
       relayServerApp = restartServer(relayServerApp, config);
-      openConnectInfoDialog(win, connectInfoDialog);
     } catch (err) {
       console.log('Failed to load server app!', err);
     }
@@ -66,7 +65,7 @@ function createWindow(op = {}) {
   }, 3000);
 }
 
-async function pingConnectPage(){
+async function pingConnectPage() {
   try {
     const response = await got('http://localhost:3300/connect');
     console.log('response.statusCode', response.statusCode);
@@ -92,10 +91,6 @@ function openConnectInfoDialog(parent, connectInfoDialog) {
   connectInfoDialog.once('ready-to-show', () => {
     connectInfoDialog.show();
   })
-  // setInterval(() => {
-  //   !connectInfoDialog.isDestroyed() && connectInfoDialog.reload();
-  // }, 3000);
-
   return connectInfoDialog;
 }
 
@@ -131,13 +126,13 @@ function buildConnectDialogUrl() {
 }
 
 function initProcessEnvironment(env = {}) {
-  process.env.PORT = env.port || "3300"
-  process.env.NODE_IP = env.node_ip || "0.0.0.0"
-  process.env.NODE_ENV = env.node_env || "production"
-  process.env.LND_IP = env.lnd_ip || "localhost"
-  process.env.LND_PORT = env.lnd_port || "11009"
-  process.env.MACAROON_LOCATION = env.macaroon_location || "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
-  process.env.TLS_LOCATION = env.tls_location || "/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert"
-  process.env.PUBLIC_URL = env.public_url || "localhost:3300"
+  process.env.PORT = env.port;
+  process.env.NODE_IP = env.node_ip;
+  process.env.NODE_ENV = env.node_env;
+  process.env.LND_IP = env.lnd_ip;
+  process.env.LND_PORT = env.lnd_port;
+  process.env.MACAROON_LOCATION = env.macaroon_location;
+  process.env.TLS_LOCATION = env.tls_location;
+  process.env.PUBLIC_URL = env.public_url;
   process.env.CONNECT_UI = true
 }

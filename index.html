@@ -134,7 +134,8 @@
         </div>
         <div class="col-sm-8">
             <div class="input-group input-group-sm">
-                <input id="macaroon_location" value="" placeholder="Absolute Path to admin.macaroon"
+                <input id="macaroon_location" value="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon" 
+                placeholder="Absolute Path to admin.macaroon"
                     class="form-control">
                 <div class="input-group-append">
                     <button type="button" onclick="showDetails('macaroon_location')"
@@ -152,7 +153,8 @@
         </div>
         <div class="col-sm-8">
             <div class="input-group input-group-sm">
-                <input id="tls_location" value="" placeholder="Absolute Path to tls.cert" class="form-control">
+                <input id="tls_location" value="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert" 
+                placeholder="Absolute Path to tls.cert" class="form-control">
                 <div class="input-group-append">
                     <button type="button" onclick="showDetails('tls_location')" class="btn btn-info btn-sm btn-info">
                         more
@@ -211,6 +213,9 @@
             console.log(...value.args)
         });
         ipcRenderer.on('console.error', (event, value) => {
+            console.error(...value.args)
+        });
+        ipcRenderer.on('xxx', (event, value) => {
             console.error(...value.args)
         });
 
