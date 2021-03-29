@@ -47,7 +47,7 @@ function createWindow(op = {}) {
     console.log('####### reload ########', config)
     try {
       initProcessEnvironment(config.env);
-      relayServerApp = restartServer(relayServerApp, config);
+      relayServerApp = restartServer(relayServerApp);
     } catch (err) {
       console.log('Failed to load server app!', err);
     }
@@ -99,7 +99,7 @@ function openConnectInfoDialog(parent, connectInfoDialog) {
   return connectInfoDialog;
 }
 
-function restartServer(relayServerApp, config) {
+function restartServer(relayServerApp) {
   relayServerApp && relayServerApp.kill()
   relayServerApp = fork(path.join(app.getAppPath(), 'electron/startServer.js'), [], {
     stdio: 'pipe'
