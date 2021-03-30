@@ -307,7 +307,9 @@
         function updateConnectionValues(config) {
             console.log('########################## updateConnectionValues ', config);
             CONN_PROPS.forEach(prop => {
-                document.getElementById(prop).value = config[prop] || '';
+                if (config[prop] !== undefined) {
+                    document.getElementById(prop).value = config[prop];
+                }
             });
         }
 

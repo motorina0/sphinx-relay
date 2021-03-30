@@ -1,7 +1,7 @@
 {
-  "name": "nodeapp",
-  "version": "1.0.0",
-  "description": "",
+  "name": "sphinx-relay-light",
+  "version": "0.1.0",
+  "description": "A light relay that connects to external Lightning Network daemon.",
   "main": "main.js",
   "scripts": {
     "test": "echo 'no tests yet!' && exit 0",
@@ -111,12 +111,14 @@
   "bin": "main.js",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "./electron/relay.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "nodeapp"
+            "name": "sphinx_relay_light"
           }
         },
         {
