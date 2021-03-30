@@ -20,60 +20,61 @@ const {
 const storage = require('./electron/storage');
 
 
-console.log('######################### main #########################')
-
 function createWindow(op = {}) {
-  console.log('###################### op: ', op)
-
-
-  const win = new BrowserWindow({
-    width: 800,
-    height: 700,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      contextIsolation: false,
-    }
-  })
-
-  win.loadFile('index.html')
-
-  process.env.APP_PATH = app.getAppPath();
-  forwardConsoleToWindow(win);
-  addRootPathToGrpc();
-
-
-  let connectInfoDialog;
-  ipcMain.on('open.connect.window', () => {
-    connectInfoDialog = openConnectInfoDialog(win, connectInfoDialog);
-  });
-
-  let relayServerApp;
-  ipcMain.on('update.config', (event, config) => {
-    console.log('####### reload ########', config)
-    try {
-      initProcessEnvironment(config.env);
-      relayServerApp = restartServer(relayServerApp);
-    } catch (err) {
-      console.log('Failed to load server app!', err);
-    }
-    console.log('#######  done reload ########')
-  });
-
-  ipcMain.on('open.dev.console', () => {
-    win && !win.isDestroyed() && win.webContents.openDevTools({
-      mode: 'bottom'
+  try {
+    const win = new BrowserWindow({
+      width: 800,
+      height: 700,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
+        contextIsolation: false,
+      }
     })
-  });
 
-  setTimeout(() => {
-    updateUIValues(win);
-  }, 1000);
+    win.loadFile('index.html')
+
+    process.env.APP_PATH = app.getAppPath();
+    forwardConsoleToWindow(win);
+    addRootPathToGrpc();
 
 
-  setInterval(async () => {
-    await pingConnectPage(win);
-  }, 3000);
+    let connectInfoDialog;
+    ipcMain.on('open.connect.window', () => {
+      connectInfoDialog = openConnectInfoDialog(win, connectInfoDialog);
+    });
+
+    let relayServerApp;
+    ipcMain.on('update.config', (event, config) => {
+      console.log('####### reload ########', config)
+      try {
+        initProcessEnvironment(config.env);
+        relayServerApp = restartServer(relayServerApp);
+      } catch (err) {
+        console.log('Failed to load server app!', err);
+      }
+      console.log('#######  done reload ########')
+    });
+
+    ipcMain.on('open.dev.console', () => {
+      win && !win.isDestroyed() && win.webContents.openDevTools({
+        mode: 'bottom'
+      })
+    });
+
+    setTimeout(() => {
+      updateUIValues(win);
+    }, 1000);
+
+
+    setInterval(async () => {
+      await pingConnectPage(win);
+    }, 3000);
+  } catch (err) {
+    console.error('Failed to create new window!');
+    console.error(err);
+  }
+
 }
 
 function updateUIValues(win) {
