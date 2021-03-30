@@ -10,19 +10,14 @@ const {
   BrowserWindow
 } = require('electron');
 
-const fs = require('fs');
-const os = require('os');
-const storage = require('electron-json-storage');
-const homedir = os.userInfo({
-  encoding: 'string'
-}).homedir;
-
 
 
 const {
   addRootPathToGrpc,
   forwardConsoleToWindow
 } = require('./electron/interceptors');
+
+const storage = require('./electron/storage');
 
 
 console.log('######################### main #########################')
@@ -71,25 +66,28 @@ function createWindow(op = {}) {
     })
   });
 
+  setTimeout(() => {
+    updateUIValues(win);
+  }, 1000);
+
+
   setInterval(async () => {
     await pingConnectPage(win);
   }, 3000);
+}
 
-
-  const osTmo = path.join(homedir, '.sphinx-relay', 'preferences');
-  if (!fs.existsSync(osTmo)) {
-    fs.mkdirSync(osTmo);
-  }
-  console.log('######################### osTmo: ', osTmo)
-  storage.setDataPath(osTmo);
-
-
-  storage.getAll(function (error, data) {
-    if (error) console.error(error);
-
-    console.log('storage.getAll 1.', data);
+function updateUIValues(win) {
+  storage.get('env', function (error, env) {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    if (env) {
+      console.log('win.webContents.send(env.update, env)');
+      win && !win.isDestroyed() && win.webContents.send('env.update', env);
+    }
+    console.log('storage.get(env) 3.', env);
   });
-
 }
 
 async function pingConnectPage(win) {
@@ -110,19 +108,6 @@ async function pingConnectPage(win) {
 
 function openConnectInfoDialog(parent, connectInfoDialog) {
   console.log("########################## 1.2.3")
-
-  storage.getAll(function (error, data) {
-    if (error) console.error(error);
-    console.log('storage.getAll 2.', data);
-  });
-
-
-
-  storage.set('foobar', {
-    foo: 'bar'
-  }, function (error) {
-    if (error) console.error(error);
-  });
 
   connectInfoDialog && connectInfoDialog.destroy();
   connectInfoDialog = new BrowserWindow({
@@ -173,6 +158,10 @@ function buildConnectDialogUrl() {
 }
 
 function initProcessEnvironment(env = {}) {
+  storage.set('env', env, function (error) {
+    if (error) console.error(error);
+  });
+
   process.env.PORT = env.port;
   process.env.NODE_IP = env.node_ip;
   process.env.NODE_HTTP_PROTOCOL = env.node_http_protocol;

@@ -84,9 +84,8 @@
         </div>
         <div class="col-sm-8">
             <div class="input-group input-group-sm">
-                <input id="macaroon_location"
-                    value="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
-                    placeholder="Absolute Path to admin.macaroon" class="form-control">
+                <input id="macaroon_location" value="" placeholder="Absolute Path to admin.macaroon"
+                    class="form-control">
                 <div class="input-group-append">
                     <button type="button" onclick="showDetails('macaroon_location')"
                         class="btn btn-info btn-sm btn-info">
@@ -103,9 +102,7 @@
         </div>
         <div class="col-sm-8">
             <div class="input-group input-group-sm">
-                <input id="tls_location"
-                    value="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/lnd/docker/prod/volumes/.lnd/tls.cert"
-                    placeholder="Absolute Path to tls.cert" class="form-control">
+                <input id="tls_location" value="" placeholder="Absolute Path to tls.cert" class="form-control">
                 <div class="input-group-append">
                     <button type="button" onclick="showDetails('tls_location')" class="btn btn-info btn-sm btn-info">
                         more
@@ -121,9 +118,8 @@
         </div>
         <div class="col-sm-8">
             <div class="input-group input-group-sm">
-                <input id="db_location"
-                    value="/Users/moto/Documents/GitHub/bitcoincoretech/ln-dev-tutorial/src/sphinx/prod/db/sphinx.db"
-                    placeholder="Absolute Path to sphinx DB file (...sphinx/db/sphinx.db)" class="form-control">
+                <input id="db_location" value="" placeholder="Absolute Path to sphinx DB file (...sphinx/db/sphinx.db)"
+                    class="form-control">
                 <div class="input-group-append">
                     <button type="button" onclick="showDetails('db_location')" class="btn btn-info btn-sm btn-info">
                         more
@@ -254,6 +250,8 @@
         const { ipcRenderer } = require('electron');
         const version = document.getElementById('app-version');
 
+        const CONN_PROPS = ['port', 'node_ip', 'node_http_protocol', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'db_location', 'public_url'];
+
         ipcRenderer.on('console.log', (event, value) => {
             console.log(...value.args)
         });
@@ -273,6 +271,10 @@
                 statusButton.classList.add("btn-danger");
                 statusButton.classList.remove("btn-success");
             }
+        });
+
+        ipcRenderer.on('env.update', (event, value) => {
+            updateConnectionValues(value);
         });
 
         function updateConfig() {
@@ -299,7 +301,14 @@
                 }, {});
             }
 
-            return fetchValues(['port', 'node_ip', 'node_http_protocol', 'node_env', 'lnd_ip', 'lnd_port', 'macaroon_location', 'tls_location', 'db_location', 'public_url']);
+            return fetchValues(CONN_PROPS);
+        }
+
+        function updateConnectionValues(config) {
+            console.log('########################## updateConnectionValues ', config);
+            CONN_PROPS.forEach(prop => {
+                document.getElementById(prop).value = config[prop] || '';
+            });
         }
 
         function showAdvancedConfig() {
