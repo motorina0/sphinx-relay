@@ -44,6 +44,7 @@
     "crypto-js": "^4.0.0",
     "dateformat": "^3.0.3",
     "decamelize": "^3.1.1",
+    "electron-json-storage": "^4.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^4.3.8",
     "express": "^4.16.4",

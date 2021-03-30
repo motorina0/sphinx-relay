@@ -8,7 +8,16 @@ const {
   app,
   ipcMain,
   BrowserWindow
-} = require('electron')
+} = require('electron');
+
+const fs = require('fs');
+const os = require('os');
+const storage = require('electron-json-storage');
+const homedir = os.userInfo({
+  encoding: 'string'
+}).homedir;
+
+
 
 const {
   addRootPathToGrpc,
@@ -20,6 +29,8 @@ console.log('######################### main #########################')
 
 function createWindow(op = {}) {
   console.log('###################### op: ', op)
+
+
   const win = new BrowserWindow({
     width: 800,
     height: 700,
@@ -63,6 +74,22 @@ function createWindow(op = {}) {
   setInterval(async () => {
     await pingConnectPage(win);
   }, 3000);
+
+
+  const osTmo = path.join(homedir, '.sphinx-relay', 'preferences');
+  if (!fs.existsSync(osTmo)) {
+    fs.mkdirSync(osTmo);
+  }
+  console.log('######################### osTmo: ', osTmo)
+  storage.setDataPath(osTmo);
+
+
+  storage.getAll(function (error, data) {
+    if (error) console.error(error);
+
+    console.log('storage.getAll 1.', data);
+  });
+
 }
 
 async function pingConnectPage(win) {
@@ -82,6 +109,21 @@ async function pingConnectPage(win) {
 }
 
 function openConnectInfoDialog(parent, connectInfoDialog) {
+  console.log("########################## 1.2.3")
+
+  storage.getAll(function (error, data) {
+    if (error) console.error(error);
+    console.log('storage.getAll 2.', data);
+  });
+
+
+
+  storage.set('foobar', {
+    foo: 'bar'
+  }, function (error) {
+    if (error) console.error(error);
+  });
+
   connectInfoDialog && connectInfoDialog.destroy();
   connectInfoDialog = new BrowserWindow({
     parent,
