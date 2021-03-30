@@ -6,10 +6,7 @@ function addRootPathToGrpc() {
   const load = grpc.load.bind(grpc);
   grpc.load = function (filename, format, options) {
     if (typeof filename === 'string') {
-      filename = {
-        root: process.env.APP_PATH,
-        file: filename
-      }
+      filename = path.join(process.env.APP_PATH,filename);
     }
     return load(filename, format, options);
   }

@@ -15,7 +15,7 @@ const {
 const {
   addRootPathToGrpc,
   forwardConsoleToWindow
-} = require('./electron/interceptors');
+} = require('./electron/server/interceptors');
 
 const storage = require('./electron/storage');
 
@@ -34,7 +34,7 @@ function createWindow(op = {}) {
 
     win.loadFile('index.html')
 
-    process.env.APP_PATH = app.getAppPath();
+    console.log('!!!!!!!!!!!!!!!!!!!!! process.env.APP_PATH',process.env.APP_PATH);
     forwardConsoleToWindow(win);
     addRootPathToGrpc();
 
@@ -53,7 +53,6 @@ function createWindow(op = {}) {
       } catch (err) {
         console.log('Failed to load server app!', err);
       }
-      console.log('#######  done reload ########')
     });
 
     ipcMain.on('open.dev.console', () => {
@@ -70,6 +69,7 @@ function createWindow(op = {}) {
     setInterval(async () => {
       await pingConnectPage(win);
     }, 3000);
+
   } catch (err) {
     console.error('Failed to create new window!');
     console.error(err);
@@ -84,10 +84,8 @@ function updateUIValues(win) {
       return;
     }
     if (env) {
-      console.log('win.webContents.send(env.update, env)');
       win && !win.isDestroyed() && win.webContents.send('env.update', env);
     }
-    console.log('storage.get(env) 3.', env);
   });
 }
 
@@ -97,7 +95,7 @@ async function pingConnectPage(win) {
   });
   let statusCode = '';
   try {
-    const response = await got('http://localhost:3300/connect', {
+    const response = await got(`${process.env.NODE_HTTP_PROTOCOL}://${process.env.NODE_IP}:${process.env.PORT}/connect`, {
       timeout: 2000
     });
     statusCode = response.statusCode;
@@ -129,7 +127,7 @@ function openConnectInfoDialog(parent, connectInfoDialog) {
 
 function restartServer(relayServerApp) {
   relayServerApp && relayServerApp.kill()
-  relayServerApp = fork(path.join(app.getAppPath(), 'electron/startServer.js'), [], {
+  relayServerApp = fork(path.join(app.getAppPath(), 'electron/server/startServer.js'), [], {
     stdio: 'pipe'
   });
   relayServerApp.on('message', (msg) => {
@@ -139,6 +137,7 @@ function restartServer(relayServerApp) {
 }
 
 app.whenReady().then(() => {
+  process.env.APP_PATH = app.getAppPath();
   createWindow()
 
   app.on('activate', () => {

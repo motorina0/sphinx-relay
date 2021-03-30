@@ -27,7 +27,7 @@ function init() {
         if (config && config.production) {
             config.production.storage = process.env.DB_LOCATION
         }
-        require('../dist/app');
+        require('../../dist/app');
     } catch (err) {
         console.error('Failed to load server app!');
         console.error(err);
